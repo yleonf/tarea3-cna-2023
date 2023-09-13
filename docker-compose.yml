@@ -13,7 +13,6 @@ services:
 
   flyway:
     image: flyway/flyway:7.7.0
-    container_name: migration_flyway
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
