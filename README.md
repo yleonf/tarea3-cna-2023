@@ -50,7 +50,7 @@ Deten tus contenedores con este comando:
 
         docker-compose down
 
-## Actividad 2
+## Actividad 2: la aplicación chatroom
 
 Edita el archivo `docker-compose.yml` y agrega los servicios de frontend y backend:
 
