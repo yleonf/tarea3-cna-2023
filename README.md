@@ -50,3 +50,81 @@ Deten tus contenedores con este comando:
 
         docker-compose down
 
+## Actividad 2
+
+Edita el archivo `docker-compose.yml` y agrega los servicios de frontend y backend:
+
+```
+  frontend:
+    build: chat-frontend
+    restart: always
+    environment:
+      - FRONT_PORT
+    expose: 
+      - 80
+    ports:
+      - ${FRONT_PORT}:80
+    volumes:
+      - ./nginx-conf/default.conf:/etc/nginx/conf.d/default.conf
+ 
+  users-svc:
+    build: users-svc
+    command: "node app.js" 
+    restart: always
+    expose:
+      - 3000
+    environment:
+      - JWT_SECRET
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_PORT=5432
+      - POSTGRES_SERVER=postgres
+      - PORT=3000
+      - CONNECTION_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      - postgres
+  
+  ws-server:
+    build: ws-server
+    command: "node index.js"
+    restart: always
+    expose:
+      - 3001
+    environment:
+      - PORT=3001
+```
+
+Asegurate de colocar un valor adecuado a la variable `FRONT_PORT`` en tu archivo `.env`
+
+Levanta los contenedores con el comando:
+
+        docker-compose up -d
+
+Navega con browser a la dirección `localhost:FRONT_PORT`, deberias ver la pagina de login.
+
+Registra un usuario, la aplicación debería estar corriendo correctamente.
+
+## Preguntas
+
+1. Revisa el archivo `Dockerfile` en la carpeta `users-svc` y compáralo con el mismo archivo en la carpeta `ws-server`. ¿Qué te llama la atención? Ahora revisa la sentencia `command` para los respectivos servicios en el archivo `docker-compose.yml`. ¿Qué concluyes?
+
+2. Revisa el archivo `Dockerfile` en la carpeta `frontend`. ¿Qué te llama la atención? ¿En qué es diferente de los otros archivos `Dockerfile`?
+
+3. ¿Para qué sirve el servicio flyway? ¿Qué pasa al hacer `docker ps` con respecto a este servicio?
+
+4. ¿Cuantas imágenes se crean? ¿Cuántos contenedores están activos?
+
+5. Deten los contenedores con `docker-compose down`, luego reinicia con `docker-compose up -d`. Ingresa a la base de datos. ¿Qué pasa con los datos? 
+
+6. Baja los contenedres. Crea un volumen para postgres agregando estas sentencias en el servicio `postgres`: 
+
+```
+ volumes:
+   - ./data:/var/lib/postgresql/data
+```
+
+Reinicia los contenedores. Explica qué pasa con la base de datos después de hacer esto.
+
+¿Qué pasa con la carpeta `data`, qué crees que contiene?
+
