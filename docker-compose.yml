@@ -1,5 +1,6 @@
 version: '3'
 services:
+
   postgres:
     image: postgres:15-alpine
     restart: always
@@ -7,9 +8,10 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
-      - POSTGRES_PORT
+      - POSTGRES_PORT=5432
+      - POSTGRES_SERVER=postgres
     expose:
-      - ${POSTGRES_PORT}
+      - 5432
 
   flyway:
     image: flyway/flyway:7.7.0
@@ -17,10 +19,11 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
-      - POSTGRES_PORT
+      - POSTGRES_PORT=5432
+      - POSTGRES_SERVER=postgres
       - FLYWAY_USER=${POSTGRES_USER}
       - FLYWAY_PASSWORD=${POSTGRES_PASSWORD}
-      - FLYWAY_URL=jdbc:postgresql://${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
+      - FLYWAY_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
       - FLYWAY_GROUP=true
     command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
     volumes:
