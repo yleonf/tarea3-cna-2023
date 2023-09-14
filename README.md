@@ -14,7 +14,7 @@ Copia el archivo `.env-sample` a `.env`, en linux esto se hace así:
 
         cp .env-sample .env
 
-Edita el archivo `.env`. Cambia los valores de las variables que quieras, excepto la variable `POSTGRES_PORT`.
+Edita el archivo `.env`. Cambia los valores de las variables que quieras.
 Graba el archiv `.env`. (En linux puedes usar el editor `nano` o `vim`).
 
 Ejecuta docker-compose de este modo:

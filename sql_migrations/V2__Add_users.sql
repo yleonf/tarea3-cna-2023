@@ -1,1 +1,0 @@
-INSERT INTO users(name, email, password) VALUES('Eduardo Diaz', 'user@domain.com', '$2b$10$62GhVF3WFDiYAXc05ClmhuSPDhjYkAY4nG9Mk4XFun6ma17KoBHIu')
