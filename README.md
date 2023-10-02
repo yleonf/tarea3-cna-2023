@@ -109,15 +109,59 @@ Registra un usuario, la aplicación debería estar corriendo correctamente.
 
 1. Revisa el archivo `Dockerfile` en la carpeta `users-svc` y compáralo con el mismo archivo en la carpeta `ws-server`. ¿Qué te llama la atención? Ahora revisa la sentencia `command` para los respectivos servicios en el archivo `docker-compose.yml`. ¿Qué concluyes?
 
+# Respuesta 
+Los archivos de Dockerfile tienen las mismas instrucciones
+
+en el servicio users-svc: el command ejecuta el archivo app.js que es el archivo de inicio de la aplicación
+en el servicio ws-server : el command ejecuta el archivo index.js que es el archivo de inicio de la aplicación
+
+# Conclusión
+si bien en ambos casos las instrucciones para generar la imagen son las mismas, los servicios se ejecutan de forma distinta.
+
+
 2. Revisa el archivo `Dockerfile` en la carpeta `frontend`. ¿Qué te llama la atención? ¿En qué es diferente de los otros archivos `Dockerfile`?
+# Respuesta
+El Dockerfile tiene dos etapas build-stage y build-release-stage
 
-3. ¿Para qué sirve el servicio flyway? ¿Qué pasa al hacer `docker ps` con respecto a este servicio?
+# build-stage
+ utiliza la imagen de node:20.5-alpine3.17
+ instala las librerias
+ realiza el build de la aplicación
 
-4. ¿Cuantas imágenes se crean? ¿Cuántos contenedores están activos?
+ # build-release-stage
+  utiliza la imagen de nginx:stable-alpine 
+  se copia el contenido de la carpeta correspondiente al build realizada en la etapa anterior (build-stage) a la 
+  carpeta de nginx 
 
-5. Deten los contenedores con `docker-compose down`, luego reinicia con `docker-compose up -d`. Ingresa a la base de datos. ¿Qué pasa con los datos? 
+4. ¿Para qué sirve el servicio flyway? ¿Qué pasa al hacer `docker ps` con respecto a este servicio?
 
-6. Baja los contenedres. Crea un volumen para postgres agregando estas sentencias en el servicio `postgres`: 
+# Respuesta
+  Flyway : permite automatizar los cambios de una Base de datos
+
+  - al hacer docker ps: el servicio  Flyway no aparece, ya que se ejecuta, aplica las instrucciones sql en la base 
+ de datos postgres y termina su ejecución
+
+6. ¿Cuantas imágenes se crean? ¿Cuántos contenedores están activos?
+# Respuesta
+
+se crean 3 imagenes:
+ Front-End
+ uses-svc
+ ws-server
+
+ hay 4 contenedores activos asociados a :
+ users-svc
+ frontend
+ postgres
+ ws-server
+
+8. Deten los contenedores con `docker-compose down`, luego reinicia con `docker-compose up -d`. Ingresa a la base de datos. ¿Qué pasa con los datos?
+
+# Respuesta
+Los datos se borran al hacer el docker-compose down ya que no se creo un volumen
+   
+
+10. Baja los contenedres. Crea un volumen para postgres agregando estas sentencias en el servicio `postgres`: 
 
 ```
  volumes:
@@ -127,4 +171,7 @@ Registra un usuario, la aplicación debería estar corriendo correctamente.
 Reinicia los contenedores. Explica qué pasa con la base de datos después de hacer esto.
 
 ¿Qué pasa con la carpeta `data`, qué crees que contiene?
+
+# Respuesta
+Al crear el volumen, se guardan los datos de la base de datos en la carpeta data del host, la carpeta data conserva los datos generados por la base de datos
 
